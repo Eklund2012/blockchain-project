@@ -14,8 +14,21 @@ class Block:
         text = f"{self.index}{self.timestamp}{self.data}{self.previous_hash}{self.nonce}"
         return hashlib.sha256(text.encode()).hexdigest()
     
-block = Block(1, "Hello Blockchain", "0")
-print(block.hash)
+class Blockchain:
+    def __init__(self):
+        self.chain = [self.create_genesis_block()]
 
-block.data = "I changed the data"
-print(block.calculate_hash())
+    def create_genesis_block(self):
+        return Block(0, "Genesis Block", "0")
+
+    def get_latest_block(self):
+        return self.chain[-1]
+    
+    def add_block(self, data):
+        latest_block = self.get_latest_block()
+        new_block = Block(
+            index = len(self.chain),
+            data = data,
+            previous_hash = latest_block.hash
+        )
+        self.chain.append(new_block)
