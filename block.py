@@ -32,3 +32,24 @@ class Blockchain:
             previous_hash = latest_block.hash
         )
         self.chain.append(new_block)
+
+my_chain = Blockchain()
+
+my_chain.add_block("First block after genesis")
+my_chain.add_block("Second block after genesis")
+
+for block in my_chain.chain:
+    print("Index:", block.index)
+    print("Data:", block.data)
+    print("Hash:", block.hash)
+    print("Previous hash:", block.previous_hash)
+    print("-" * 30)
+
+my_chain.chain[1].data = "I hacked this block"
+
+for block in my_chain.chain:
+    print("Index:", block.index)
+    print("Data:", block.data)
+    print("Hash:", block.hash)
+    print("Previous hash:", block.previous_hash)
+    print("-" * 30)
