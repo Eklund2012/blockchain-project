@@ -1,6 +1,8 @@
 import hashlib
 import time
 
+DIFFICULTY = 4
+
 class Block:
     def __init__(self, index, data, previous_hash):
         self.index = index
@@ -13,6 +15,12 @@ class Block:
     def calculate_hash(self):
         text = f"{self.index}{self.timestamp}{self.data}{self.previous_hash}{self.nonce}"
         return hashlib.sha256(text.encode()).hexdigest()
+    
+    def mine_block(self, difficulty):
+        target = "0" * difficulty
+        while not self.hash.startswith(target):
+            self.nonce += 1
+            self.hash = self.calculate_hash()
     
 class Blockchain:
     def __init__(self):
@@ -31,6 +39,7 @@ class Blockchain:
             data = data,
             previous_hash = latest_block.hash
         )
+        new_block.mine_block(DIFFICULTY)
         self.chain.append(new_block)
 
 my_chain = Blockchain()
@@ -46,6 +55,7 @@ for block in my_chain.chain:
     print("-" * 30)
 
 my_chain.chain[1].data = "I hacked this block"
+my_chain.chain[1].hash = my_chain.chain[1].calculate_hash()
 
 for block in my_chain.chain:
     print("Index:", block.index)
