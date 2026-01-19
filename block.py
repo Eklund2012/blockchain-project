@@ -42,24 +42,32 @@ class Blockchain:
         new_block.mine_block(DIFFICULTY)
         self.chain.append(new_block)
 
+    def is_chain_valid(self):
+        target = "0" * DIFFICULTY
+
+        for i in range(1, len(self.chain)):
+            current = self.chain[i]
+            previous = self.chain[i-1]
+
+            # Recalculate has and compare
+            if current.hash != current.calculate_hash():
+                return False
+            
+            if not current.hash.startswith(target):
+                return False
+            
+            # Check Chain linkage
+            if current.previous_hash != previous.hash:
+                return False
+            
+        return True
+
 my_chain = Blockchain()
 
 my_chain.add_block("First block after genesis")
 my_chain.add_block("Second block after genesis")
 
-for block in my_chain.chain:
-    print("Index:", block.index)
-    print("Data:", block.data)
-    print("Hash:", block.hash)
-    print("Previous hash:", block.previous_hash)
-    print("-" * 30)
-
 my_chain.chain[1].data = "I hacked this block"
-my_chain.chain[1].hash = my_chain.chain[1].calculate_hash()
 
-for block in my_chain.chain:
-    print("Index:", block.index)
-    print("Data:", block.data)
-    print("Hash:", block.hash)
-    print("Previous hash:", block.previous_hash)
-    print("-" * 30)
+print("Is chain valid?", my_chain.is_chain_valid())
+
