@@ -25,6 +25,7 @@ class Block:
 class Blockchain:
     def __init__(self):
         self.chain = [self.create_genesis_block()]
+        self.pending_transactions = []
 
     def create_genesis_block(self):
         return Block(0, "Genesis Block", "0")
@@ -41,6 +42,27 @@ class Blockchain:
         )
         new_block.mine_block(DIFFICULTY)
         self.chain.append(new_block)
+
+    def create_transaction(self, sender, receiver, amount):
+        transaction = {
+            "sender", sender,
+            "receiver", receiver,
+            "amount", amount
+        }
+        self.pending_transactions.append(transaction)
+
+    def mine_pending_transactions(self):
+        block = Block(
+            index=len(self.chain),
+            data=self.pending_transactions,
+            previous_hash=self.get_latest_block().hash
+        )
+
+        block.mine_block(DIFFICULTY)
+        self.chain.append(block)
+
+        self.pending_transactions = []
+
 
     def is_chain_valid(self):
         target = "0" * DIFFICULTY
@@ -64,10 +86,15 @@ class Blockchain:
 
 my_chain = Blockchain()
 
-my_chain.add_block("First block after genesis")
-my_chain.add_block("Second block after genesis")
+my_chain.create_transaction("Alice", "Bob", 50)
+my_chain.create_transaction("Bob", "Charlie", 25)
 
-my_chain.chain[1].data = "I hacked this block"
+my_chain.mine_pending_transactions()
+
+for block in my_chain.chain:
+    print("Index:", block.index)
+    print("Transactions:", block.data)
+    print("Hash:", block.hash)
+    print("-" * 30)
 
 print("Is chain valid?", my_chain.is_chain_valid())
-
