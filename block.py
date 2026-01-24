@@ -1,5 +1,6 @@
 import hashlib
 import time
+import json
 
 DIFFICULTY = 4
 
@@ -44,10 +45,16 @@ class Blockchain:
         self.chain.append(new_block)
 
     def create_transaction(self, sender, receiver, amount):
+        if not sender or not receiver:
+            raise ValueError("Sender and receiver are required")
+        
+        if amount <= 0: 
+            raise ValueError("Amount must be positive")
+        
         transaction = {
-            "sender", sender,
-            "receiver", receiver,
-            "amount", amount
+            "sender": sender,
+            "receiver": receiver,
+            "amount": amount
         }
         self.pending_transactions.append(transaction)
 
@@ -82,7 +89,31 @@ class Blockchain:
             if current.previous_hash != previous.hash:
                 return False
             
+            for tx in current.data:
+                if tx["amount"] <= 0:
+                    return False
+                
         return True
+    
+    def save_to_file(self, filename="blockchain.json"):
+        with open(filename, "w") as f:
+            json.dump(self.chain, f, default=lambda o: o.__dict__, indent=2)
+
+    def load_from_file(self, filename="blockchain.json"):
+        with open(filename, "r") as f:
+            chain_data = json.load(f)
+
+        self.chain = []
+        for block_data in chain_data:
+            block = Block(
+                block_data["index"],
+                block_data["data"],
+                block_data["previous_hash"]
+            )
+            block.timestamp = block_data["timestamp"]
+            block.nonce = block_data["nonce"]
+            block.hash = block_data["hash"]
+            self.chain.append(block)
 
 my_chain = Blockchain()
 
@@ -98,3 +129,12 @@ for block in my_chain.chain:
     print("-" * 30)
 
 print("Is chain valid?", my_chain.is_chain_valid())
+
+my_chain.save_to_file()
+
+new_chain = Blockchain()
+new_chain.load_from_file()
+
+print("Loaded chain valid?: ", new_chain.is_chain_valid())
+
+print(type(my_chain.chain[1].data[0]))
