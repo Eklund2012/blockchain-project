@@ -1,29 +1,29 @@
 [
   {
     "index": 0,
-    "timestamp": 1769260953.2775304,
+    "timestamp": 1773583476.3731697,
     "data": "Genesis Block",
     "previous_hash": "0",
-    "nonce": 0,
-    "hash": "bae299e9edf3fdc6e4ad734003abba3954daaafbaf0b7c89cb0f188193b749f8"
+    "hash": "be133cf08ac94757350309a6a9aacdd84e1186a5742f50a4fa4250a55f472432"
   },
   {
     "index": 1,
-    "timestamp": 1769260953.2775698,
-    "data": [
-      {
-        "sender": "Alice",
-        "receiver": "Bob",
-        "amount": 50
-      },
-      {
-        "sender": "Bob",
-        "receiver": "Charlie",
-        "amount": 25
-      }
-    ],
-    "previous_hash": "bae299e9edf3fdc6e4ad734003abba3954daaafbaf0b7c89cb0f188193b749f8",
-    "nonce": 201845,
-    "hash": "00000fd746184852cc19b5bb457dab601240fef82d852a2dd93a71c7008388a3"
+    "timestamp": 1773583476.3732016,
+    "data": {
+      "action": "Fix bug #123",
+      "details": "Changed function X"
+    },
+    "previous_hash": "be133cf08ac94757350309a6a9aacdd84e1186a5742f50a4fa4250a55f472432",
+    "hash": "57a231e9f10e204ecfc5e80ee1ec835de26baf35312142337afa2709a2d6f008"
+  },
+  {
+    "index": 2,
+    "timestamp": 1773583476.3732228,
+    "data": {
+      "action": "Write report",
+      "details": "Version 1.0"
+    },
+    "previous_hash": "57a231e9f10e204ecfc5e80ee1ec835de26baf35312142337afa2709a2d6f008",
+    "hash": "4fcf5627f04a0f890393c3550c0210b9a4e17fc3f468d520ab5266f41b6d4f6a"
   }
 ]
